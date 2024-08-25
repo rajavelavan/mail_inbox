@@ -2,10 +2,8 @@
 import { useState } from 'react';
 import {
   FaHome,
-  FaUser,
   FaEnvelope,
   FaTelegramPlane,
-  FaTable,
   FaChartBar,
   FaInbox,
 } from 'react-icons/fa';
@@ -13,7 +11,7 @@ import { RiUserSearchLine } from 'react-icons/ri';
 import { TfiMenuAlt } from 'react-icons/tfi';
 
 export default function Sidebar() {
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(5);
 
   const menuItems = [
     { icon: FaHome, link: '#home' },
@@ -27,7 +25,7 @@ export default function Sidebar() {
 
   return (
     <div className="flex flex-col items-center justify-center bg-white text-gray-500 dark:bg-[#101113] border-r-2 h-screen">
-      <div>img</div>
+      {/* <div>img</div> */}
       <div className="flex flex-col items-center space-y-4 gap-5">
         {menuItems.map((item, index) => (
           <a
