@@ -8,14 +8,14 @@ interface LayoutProps {
 
 const Layout = ({ children }: LayoutProps) => {
   return (
-    <div className='flex h-screen'>
+    <div className='flex'>
       <div className='w-[4%]'>
       <Sidebar/>
       </div>
       <div className='w-[96%]'>
         <Header/>
         <div>
-          <main className=''>{children}</main>
+          <main className=' h-full'>{children}</main>
         </div>
       </div>
     </div> 

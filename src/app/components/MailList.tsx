@@ -1,14 +1,48 @@
 import axios from 'axios';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+
 import { IoReload } from 'react-icons/io5';
 import { SlArrowDown } from 'react-icons/sl';
 
-const MailList =()  => {
+interface Mail {
+  id: string;
+  fromEmail: string;
+  subject: string;
+  sentAt: string;
+  inReplyTo: string;
+}
+
+const MailList = () => {
+  const router = useRouter();
+
+  const [mails, setMails] = useState<Mail[]>([]);
+  const [selectedMailId, setSelectedMailId] = useState('');
+
   useEffect(() => {
-    
-  });
+    const jwt = localStorage.getItem('token');
+    console.log('Token is found.');
+    if (!jwt) {
+      router.push('/login');
+    }
+
+    const fetchData = async () => {
+      try {
+        let res = await axios.get(
+          'https://hiring.reachinbox.xyz/api/v1/onebox/list',
+          { headers: { Authorization: `Bearer ${jwt}` } }
+        );
+        setMails(res.data.data);
+        console.log(res.data);
+      } catch (error) {
+        console.error("Error in fetching data", error);
+      }
+    };
+    fetchData();
+  }, [router]);
+
   return (
-    <div className='h-[inherit]'>
+    <div className="h-[inherit]">
       <div>
         <div className="flex justify-between">
           <div className="flex text-blue-500 items-center justify-around">
@@ -48,28 +82,29 @@ const MailList =()  => {
         </div>
       </div>
       <div className="mt-5">
-        {/* {mails.map((mail) => (
-          <div
-            key={mail.id}
-            onClick={() => onSelectMail(mail.fromEmail)}
-            className={`p-4 dark:border-t-2 dark:border-t-[#191C1F] cursor-pointer ${
-              selectedMailId === mail.id
-                ? 'text-black dark:text-[#F4FAFF] border-l-2 border-[#5C7CFA]'
-                : ''
-            }`}
-          >
-            <div className="">{mail.sentAt}</div>
-            <div className="">{mail.messageId}</div>
-            <div>{mail.subject}</div>
+        {mails.map(i => {
+          return (
             <div
-              className={`text-xs ${
-                mail.status === 'Closed' ? 'text-[#626FE6] rounded-lg' : ''
+              key={i.id}
+              className={`p-4 dark:border-t-2 dark:border-t-[#191C1F] cursor-pointer ${
+                selectedMailId === i.id
+                  ? 'text-black dark:text-[#F4FAFF] border-l-2 border-[#5C7CFA]'
+                  : ''
               }`}
             >
-              {mail.status}
+              <div className="font-extrabold">{i.fromEmail}</div>
+              <div className="font-light">{i.subject}</div>
+              
+              <div
+                className={`text-xs font-extralight ${
+                  i.inReplyTo === 'Closed' ? 'text-[#626FE6] rounded-lg' : ''
+                }`}
+              >
+                {i.sentAt}
+              </div>
             </div>
-          </div>
-        ))} */}
+          );
+        })}
       </div>
     </div>
   );
