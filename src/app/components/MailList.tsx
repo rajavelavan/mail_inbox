@@ -6,9 +6,10 @@ import { IoReload } from 'react-icons/io5';
 import { SlArrowDown } from 'react-icons/sl';
 
 interface Mail {
-  id: string;
+  id: number;
   fromEmail: string;
   subject: string;
+  threadId: number;
   sentAt: string;
   inReplyTo: string;
 }
@@ -17,7 +18,7 @@ const MailList = () => {
   const router = useRouter();
 
   const [mails, setMails] = useState<Mail[]>([]);
-  const [selectedMailId, setSelectedMailId] = useState('');
+  const [selectedMailId, setSelectedMailId] = useState<number | null>(null);
 
   useEffect(() => {
     const jwt = localStorage.getItem('token');
@@ -35,11 +36,16 @@ const MailList = () => {
         setMails(res.data.data);
         console.log(res.data);
       } catch (error) {
-        console.error("Error in fetching data", error);
+        console.error('Error in fetching data', error);
       }
     };
     fetchData();
   }, [router]);
+
+  const handleMailClick = (id: number) => {
+    setSelectedMailId(id);
+    console.log(id);
+  };
 
   return (
     <div className="h-[inherit]">
@@ -82,19 +88,20 @@ const MailList = () => {
         </div>
       </div>
       <div className="mt-5">
-        {mails.map(i => {
+        {mails.map((i) => {
           return (
             <div
               key={i.id}
+              onClick={() => handleMailClick(i.threadId)}
               className={`p-4 dark:border-t-2 dark:border-t-[#191C1F] cursor-pointer ${
-                selectedMailId === i.id
+                selectedMailId === i.threadId
                   ? 'text-black dark:text-[#F4FAFF] border-l-2 border-[#5C7CFA]'
                   : ''
               }`}
             >
               <div className="font-extrabold">{i.fromEmail}</div>
               <div className="font-light">{i.subject}</div>
-              
+
               <div
                 className={`text-xs font-extralight ${
                   i.inReplyTo === 'Closed' ? 'text-[#626FE6] rounded-lg' : ''
@@ -111,3 +118,5 @@ const MailList = () => {
 };
 
 export default MailList;
+
+
