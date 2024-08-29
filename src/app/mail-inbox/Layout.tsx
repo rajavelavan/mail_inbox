@@ -1,3 +1,5 @@
+'use client'
+
 import React, { ReactNode } from 'react';
 import Sidebar from '../components/SideBar';
 import Header from '../components/NavBar';
@@ -10,12 +12,12 @@ const Layout = ({ children }: LayoutProps) => {
   return (
     <div className='flex'>
       <div className='w-[4%]'>
-      <Sidebar/>
+        <Sidebar/>
       </div>
       <div className='w-[96%]'>
         <Header/>
         <div>
-          <main className=' h-full'>{children}</main>
+          <main className=''>{children}</main>
         </div>
       </div>
     </div> 

@@ -2,21 +2,24 @@ import axios from 'axios';
 import React, { useState } from 'react';
 import { RxCross1 } from 'react-icons/rx';
 
-interface MailReplyProps {
+interface MailReply {
   sender: string;
   receipient: string;
   subject: string;
   body: string;
+}
+
+interface MailReplyProps {
   onCancel: () => void;
 }
 
-const MailReply: React.FC<MailReplyProps> = ({
+const MailReply = ({
   sender,
   receipient,
   subject,
-  body,
-  onCancel,
-}) => {
+  body}: MailReply,
+  {onCancel,
+}: MailReplyProps) => {
 
   const [reply, setReply] = useState({sender: '', receipient: '', subject: `${subject}`, body: ''});
 
@@ -27,7 +30,7 @@ const MailReply: React.FC<MailReplyProps> = ({
 
   const handleSend = async () => {
     try {
-      const res = await axios.post('/api/route', reply);
+      const res = await axios.post(`https://hiring.reachinbox.xyz/api/v1/onebox/reply/58791`, reply);
       console.log('Yes', res.data);
       onCancel(); // Close the reply form after sending
     } catch (error: any) {
