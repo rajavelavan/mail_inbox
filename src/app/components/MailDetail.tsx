@@ -14,13 +14,15 @@ interface MailDetail {
 }
 
 interface MailDetailProps {
-  threadId: number;
+  thread : any;
 }
 
-const MailDetail = () => {
+const MailDetail = ({thread}: MailDetailProps) => {
   const router = useRouter();
   const [isReplying, setIsReplying] = useState<boolean>(false);
   const [content, setContent] = useState<any>(null);
+
+  console.log(content);
 
   
   useEffect(() => {
@@ -33,7 +35,7 @@ const MailDetail = () => {
     const fetchData = async () => {
       try {
         let res = await axios.get(
-          `https://hiring.reachinbox.xyz/api/v1/onebox/messages/58791`,
+          `https://hiring.reachinbox.xyz/api/v1/onebox/messages/${thread}`,
           { headers: { Authorization: `Bearer ${jwt}` } }
         );
         setContent(res.data.data);
@@ -43,11 +45,24 @@ const MailDetail = () => {
       }
     };
     fetchData();
-  }, [router]);
+  }, [router, thread]);
 
   const handleReplyClick = () => {
     setIsReplying(true);
   };
+
+  useEffect(() => {
+    const handleReply = (e: KeyboardEvent) => {
+      if (e.ctrlKey && e.key === 'r') {
+        e.preventDefault();
+        setIsReplying(true);
+      }
+    };
+    window.addEventListener('keydown', handleReply);
+    return () => {
+      window.removeEventListener('keydown', handleReply);
+    };
+  }, []);
   return (
     <div className="w-full">
       <MainHeader />
@@ -91,10 +106,8 @@ const MailDetail = () => {
         ) : (
           <div className="">
             <MailReply
-              sender={content.toEmail}
-              receipient={content.fromEmail}
-              subject={`Re:${content.subject}`}
-              body=""
+              data={content}
+              thread= {thread}
               onCancel={() => setIsReplying(false)}
             />
           </div>

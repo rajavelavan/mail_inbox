@@ -8,8 +8,10 @@ import MailDetail from './MailDetail';
 
 interface Mail {
   id: number;
+  toMail: string;
   fromEmail: string;
   subject: string;
+  body: string;
   threadId: number;
   sentAt: string;
   inReplyTo: string;
@@ -19,7 +21,7 @@ interface MailListProps {
   onMailSelect: (threadId: number) => void;
 }
 
-const MailList = () => {
+const MailList = ({onMailSelect}:MailListProps) => {
   const router = useRouter();
 
   const [mails, setMails] = useState<Mail[]>([]);
@@ -59,6 +61,7 @@ const MailList = () => {
   
 
   const handleMailClick = (threadId: number) => {
+    onMailSelect(threadId);
     setSelectedThreadId(threadId);
   };
 

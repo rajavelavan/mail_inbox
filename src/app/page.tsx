@@ -1,6 +1,10 @@
 import Image from "next/image";
 
 export default function Home() {
+  if(process.env.NODE_ENV === 'development') {
+    console.log("This will only log in development.");
+  }
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
@@ -107,6 +111,7 @@ export default function Home() {
             Instantly deploy your Next.js site to a shareable URL with Vercel.
           </p>
         </a>
+        <button className="p-2 bg-slate-700 text-white rounded-lg"><a href="/login">Login</a></button>
       </div>
     </main>
   );
