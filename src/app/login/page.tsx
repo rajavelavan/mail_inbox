@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 export default function Login() {
   const router = useRouter();
 
-  const redirectURL = `https://hiring.reachinbox.xyz/api/v1/auth/google-login?redirect_to=http://localhost:3000/mail-inbox`;
+  const redirectURL = `https://hiring.reachinbox.xyz/api/v1/auth/google-login?redirect_to=https://mail-inbox-nine.vercel.app/mail-inbox`;
 
   const onCreate = () => {
     window.location.href = redirectURL;

@@ -1,7 +1,7 @@
 import Image from "next/image";
 
 export default function Home() {
-  if(process.env.NODE_ENV === 'development') {
+  if(process.env.NODE_ENV === 'production') {
     console.log("This will only log in development.");
   }
 
