@@ -111,7 +111,7 @@ export default function Home() {
             Instantly deploy your Next.js site to a shareable URL with Vercel.
           </p>
         </a>
-        <button className="p-2 bg-slate-700 text-white rounded-lg"><a href="/login">Login</a></button>
+        <button className="p-2 bg-slate-700 text-white rounded-lg"><a href="/login">Press here to enter the website</a></button>
       </div>
     </main>
   );
