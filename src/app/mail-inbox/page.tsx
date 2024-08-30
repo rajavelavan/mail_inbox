@@ -11,6 +11,7 @@ import { useRouter } from 'next/navigation';
 export default function Main() {
   const router = useRouter();
   const [selectedThreadId, setSelectedThreadId] = useState<number | null>();
+  const [token, setToken] = useState<string | null>(null);
   const [showPopup, setShowPopup] = useState(false);
 
   const handleClick = (threadId: number) => {
@@ -18,19 +19,14 @@ export default function Main() {
     setSelectedThreadId(threadId);
   }
 
-  const jwt = localStorage.getItem('token');
-    console.log('Token is found.');
-    if (!jwt) {
-      router.push('/login');
-    }
-
+  
   async function deleteData(confirmed: boolean) {
-    const jwt = localStorage.getItem('token');
-    if (confirmed && jwt) {
+    
+    if (confirmed && token) {
       try {
         const res = await axios.delete(
           `https://hiring.reachinbox.xyz/api/v1/onebox/messages/${selectedThreadId}`,
-          { headers: { Authorization: `Bearer ${jwt}` } }
+          { headers: { Authorization: `Bearer ${token}` } }
         );
         console.log('Deletion success.', res.data);
       } catch (error) {
@@ -39,9 +35,15 @@ export default function Main() {
     }
     setShowPopup(false);
   }
-
-
+  
+  
   useEffect(() => {
+    const jwt = localStorage.getItem('token');
+      console.log('Token is found.');
+      setToken(jwt);
+      if (!jwt) {
+        router.push('/login');
+      }
     const handleDelete = (e: KeyboardEvent) => {
       if (e.ctrlKey && e.key === 'd') {
         e.preventDefault();
@@ -52,7 +54,7 @@ export default function Main() {
     return () => {
       window.removeEventListener('keydown', handleDelete);
     };
-  });
+  }, [router]);
 
 
   return (

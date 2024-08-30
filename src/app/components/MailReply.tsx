@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { headers } from 'next/headers';
 import { useRouter } from 'next/navigation';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { RxCross1 } from 'react-icons/rx';
 
 interface MailReply {
@@ -27,6 +27,7 @@ const MailReply = ({ data, thread, onCancel }: MailReplyProps) => {
   console.log(data);
   // const [reply, setReply] = useState(data);
   const [postData, setPostData] = useState<any>(null);
+  const [token, setToken] = useState<string | null>(null);
 
   const handleChange = (e: any) => {
     console.log("e.target.name", e.target.name)
@@ -47,18 +48,22 @@ const MailReply = ({ data, thread, onCancel }: MailReplyProps) => {
     });
   };
 
-  const jwt = localStorage.getItem('token');
-  console.log('Token is found.');
-  if (!jwt) {
-    router.push('/login');
-  }
+  useEffect(()=> {
+    const jwt = localStorage.getItem('token');
+    console.log('Token is found.');
+    setToken(jwt);
+    if (!jwt) {
+      router.push('/login');
+    }
+  }, [router])
+
 
   const handleSend = async () => {
     try {
       const res = await axios.post(
         `https://hiring.reachinbox.xyz/api/v1/onebox/reply/${thread}`,
         postData,
-        { headers: { Authorization: `Bearer ${jwt}` } }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
       console.log('Yes', res.data);
       onCancel(); // Close the reply form after sending

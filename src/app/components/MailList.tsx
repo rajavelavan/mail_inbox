@@ -21,27 +21,27 @@ interface MailListProps {
   onMailSelect: (threadId: number) => void;
 }
 
-const MailList = ({onMailSelect}:MailListProps) => {
+const MailList = ({ onMailSelect }: MailListProps) => {
   const router = useRouter();
-
+  const [token, setToken] = useState<string | null>(null);
   const [mails, setMails] = useState<Mail[]>([]);
   const [selectedThreadId, setSelectedThreadId] = useState<number | null>(null);
-  
-  const jwt = localStorage.getItem('token');
-  console.log('Token is found.');
-  if (!jwt) {
-    router.push('/login');
-  }
 
   async function RestoreData() {
     let res = await axios.get(
       'https://hiring.reachinbox.xyz/api/v1/onebox/reset',
-      { headers: { Authorization: `Bearer ${jwt}` } }
+      { headers: { Authorization: `Bearer ${token}` } }
     );
     console.log('data reset successfully.', res.data);
   }
 
   useEffect(() => {
+    const jwt = localStorage.getItem('token');
+    console.log('Token is found.');
+    setToken(jwt);
+    if (!jwt) {
+      router.push('/login');
+    }
 
     const fetchData = async () => {
       try {
@@ -56,9 +56,7 @@ const MailList = ({onMailSelect}:MailListProps) => {
       }
     };
     fetchData();
-  }, [router, jwt]);
-
-  
+  }, [router]);
 
   const handleMailClick = (threadId: number) => {
     onMailSelect(threadId);
@@ -74,7 +72,10 @@ const MailList = ({onMailSelect}:MailListProps) => {
         </div>
         <div className="p-2">
           <button className="flex justify-center items-center size-10 border-2 dark:bg-medium border-gray-400 rounded text-center">
-            <IoReload className="size-6 text-slate-800 dark:text-white" onClick={RestoreData} />
+            <IoReload
+              className="size-6 text-slate-800 dark:text-white"
+              onClick={RestoreData}
+            />
           </button>
         </div>
       </div>
