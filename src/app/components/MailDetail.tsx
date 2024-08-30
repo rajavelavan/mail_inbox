@@ -21,6 +21,8 @@ const MailDetail = ({thread}: MailDetailProps) => {
   const router = useRouter();
   const [isReplying, setIsReplying] = useState<boolean>(false);
   const [content, setContent] = useState<any>(null);
+  const [token, setToken] = useState<string | null>(null);
+  const [showPopup, setShowPopup] = useState(false);
 
   console.log(content);
 
@@ -51,6 +53,22 @@ const MailDetail = ({thread}: MailDetailProps) => {
     setIsReplying(true);
   };
 
+  async function deleteData(confirmed: boolean) {
+    
+    if (confirmed && token) {
+      try {
+        const res = await axios.delete(
+          `https://hiring.reachinbox.xyz/api/v1/onebox/messages/${thread}`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        console.log('Deletion success.', res.data);
+      } catch (error) {
+        console.error('Error deleting data:', error);
+      }
+    }
+    setShowPopup(false);
+  }
+
   useEffect(() => {
     const handleReply = (e: KeyboardEvent) => {
       if (e.ctrlKey && e.key === 'r') {
@@ -63,6 +81,26 @@ const MailDetail = ({thread}: MailDetailProps) => {
       window.removeEventListener('keydown', handleReply);
     };
   }, []);
+
+  useEffect(() => {
+    const jwt = localStorage.getItem('token');
+      console.log('Token is found.');
+      setToken(jwt);
+      if (!jwt) {
+        router.push('/login');
+      }
+    const handleDelete = (e: KeyboardEvent) => {
+      if (e.ctrlKey && e.key === 'd') {
+        e.preventDefault();
+        setShowPopup(true);
+      }
+    };
+    window.addEventListener('keydown', handleDelete);
+    return () => {
+      window.removeEventListener('keydown', handleDelete);
+    };
+  }, [router]);
+
   return (
     <div className="w-full">
       <MainHeader />
@@ -113,6 +151,36 @@ const MailDetail = ({thread}: MailDetailProps) => {
           </div>
         )}
       </div>
+      {showPopup && (
+          <div className="relative inline-block">
+            <div className="fixed inset-0 z-50 bg-gray-500 bg-opacity-50 h-screen px-4 md:px-8">
+              <div className="flex flex-col items-center justify-center w-full max-w-md mx-auto shadow-lg rounded-md bg-white overflow-hidden">
+                <div className="p-6 text-center">
+                  <h1 className="text-xl font-bold text-gray-800">
+                    Confirm Delete
+                  </h1>
+                  <p className="mt-2 text-sm text-gray-700">
+                    Are you sure you want to delete this item?
+                  </p>
+                </div>
+                <div className="flex justify-center items-center p-3 space-x-4">
+                  <button
+                    className="inline-flex justify-center px-4 py-2 text-sm text-white bg-red-600 rounded-md hover:bg-red-700 focus:outline-none"
+                    onClick={() => deleteData(true)}
+                  >
+                    Yes
+                  </button>
+                  <button
+                    className="inline-flex justify-center px-4 py-2 text-sm text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300 focus:outline-none"
+                    onClick={() => deleteData(false)}
+                  >
+                    No
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
     </div>
   );
 };
