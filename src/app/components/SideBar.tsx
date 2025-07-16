@@ -24,7 +24,7 @@ export default function Sidebar() {
   ];
 
   return (
-    <div className="flex flex-col items-center justify-center bg-white text-gray-500 dark:bg-[#101113] border-r-2 h-screen">
+    <div className="flex flex-col h-full items-center justify-center bg-white text-gray-500 dark:bg-[#101113] border-r-2">
       {/* <div>img</div> */}
       <div className="flex flex-col items-center space-y-4 gap-5">
         {menuItems.map((item, index) => (

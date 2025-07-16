@@ -14,10 +14,10 @@ interface MailDetail {
 }
 
 interface MailDetailProps {
-  thread : any;
+  thread: any;
 }
 
-const MailDetail = ({thread}: MailDetailProps) => {
+const MailDetail = ({ thread }: MailDetailProps) => {
   const router = useRouter();
   const [isReplying, setIsReplying] = useState<boolean>(false);
   const [content, setContent] = useState<any>(null);
@@ -26,7 +26,6 @@ const MailDetail = ({thread}: MailDetailProps) => {
 
   console.log(content);
 
-  
   useEffect(() => {
     const jwt = localStorage.getItem('token');
     console.log('Token is found.');
@@ -54,7 +53,6 @@ const MailDetail = ({thread}: MailDetailProps) => {
   };
 
   async function deleteData(confirmed: boolean) {
-    
     if (confirmed && token) {
       try {
         const res = await axios.delete(
@@ -84,11 +82,11 @@ const MailDetail = ({thread}: MailDetailProps) => {
 
   useEffect(() => {
     const jwt = localStorage.getItem('token');
-      console.log('Token is found.');
-      setToken(jwt);
-      if (!jwt) {
-        router.push('/login');
-      }
+    console.log('Token is found.');
+    setToken(jwt);
+    if (!jwt) {
+      router.push('/login');
+    }
     const handleDelete = (e: KeyboardEvent) => {
       if (e.ctrlKey && e.key === 'd') {
         e.preventDefault();
@@ -102,13 +100,13 @@ const MailDetail = ({thread}: MailDetailProps) => {
   }, [router]);
 
   return (
-    <div className="w-full">
+    <div className="w-full max-h-screen">
       <MainHeader />
-      <div>
+      <div className='overflow-auto'>
         {content &&
           content.map((item: any, index: number) => (
             <React.Fragment key={`${index}`}>
-              <div className="inline-flex items-center justify-center w-full">
+              <div className="inline-flex items-center justify-center w-full p-2">
                 <hr className="w-full mx-4 h-px my-8 bg-[#E7E9EB] border-0 dark:bg-[#191919]" />
                 <span className="absolute p-2 text-xs dark:text-white text-[#687885] bg-[#EEF1F4] dark:bg-[#171819] rounded-lg">
                   {new Date(item?.updatedAt).toLocaleDateString('en-US', {
@@ -118,8 +116,8 @@ const MailDetail = ({thread}: MailDetailProps) => {
                   })}
                 </span>
               </div>
-              <div className="p-4">
-                <div className="container text-left bg-[#F9F9F9] dark:bg-[#141517] p-4 border rounded-lg max-h-80 overflow-auto">
+              <div className="px-4">
+                <div className="container text-left bg-[#F9F9F9] dark:bg-[#141517] p-4 border rounded-lg">
                   <h2 className="text-xl text-black dark:text-white font-normal">
                     {item?.subject}
                   </h2>
@@ -132,55 +130,55 @@ const MailDetail = ({thread}: MailDetailProps) => {
               </div>
             </React.Fragment>
           ))}
-      </div>
-      <div className="p-2 w-[57.5%] fixed bottom-4">
-        {!isReplying ? (
-          <button
-            onClickCapture={handleReplyClick}
-            className="mt-2 p-2 left-4 bg-blue-500 text-white rounded"
-          >
-            Reply
-          </button>
-        ) : (
-          <div className="">
-            <MailReply
-              data={content}
-              thread= {thread}
-              onCancel={() => setIsReplying(false)}
-            />
-          </div>
-        )}
+        <div className="p-2">
+          {!isReplying ? (
+            <button
+              onClickCapture={handleReplyClick}
+              className="p-2 bg-blue-500 text-white rounded"
+            >
+              Reply
+            </button>
+          ) : (
+            <div className="">
+              <MailReply
+                data={content}
+                thread={thread}
+                onCancel={() => setIsReplying(false)}
+              />
+            </div>
+          )}
+        </div>
       </div>
       {showPopup && (
-          <div className="relative inline-block">
-            <div className="fixed inset-0 z-50 bg-gray-500 bg-opacity-50 h-screen px-4 md:px-8">
-              <div className="flex flex-col items-center justify-center w-full max-w-md mx-auto shadow-lg rounded-md bg-white overflow-hidden">
-                <div className="p-6 text-center">
-                  <h1 className="text-xl font-bold text-gray-800">
-                    Confirm Delete
-                  </h1>
-                  <p className="mt-2 text-sm text-gray-700">
-                    Are you sure you want to delete this item?
-                  </p>
-                </div>
-                <div className="flex justify-center items-center p-3 space-x-4">
-                  <button
-                    className="inline-flex justify-center px-4 py-2 text-sm text-white bg-red-600 rounded-md hover:bg-red-700 focus:outline-none"
-                    onClick={() => deleteData(true)}
-                  >
-                    Yes
-                  </button>
-                  <button
-                    className="inline-flex justify-center px-4 py-2 text-sm text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300 focus:outline-none"
-                    onClick={() => deleteData(false)}
-                  >
-                    No
-                  </button>
-                </div>
+        <div className="relative inline-block">
+          <div className="fixed inset-0 z-50 bg-gray-500 bg-opacity-50 h-screen px-4 md:px-8">
+            <div className="flex flex-col items-center justify-center w-full max-w-md mx-auto shadow-lg rounded-md bg-white overflow-hidden">
+              <div className="p-6 text-center">
+                <h1 className="text-xl font-bold text-gray-800">
+                  Confirm Delete
+                </h1>
+                <p className="mt-2 text-sm text-gray-700">
+                  Are you sure you want to delete this item?
+                </p>
+              </div>
+              <div className="flex justify-center items-center p-3 space-x-4">
+                <button
+                  className="inline-flex justify-center px-4 py-2 text-sm text-white bg-red-600 rounded-md hover:bg-red-700 focus:outline-none"
+                  onClick={() => deleteData(true)}
+                >
+                  Yes
+                </button>
+                <button
+                  className="inline-flex justify-center px-4 py-2 text-sm text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300 focus:outline-none"
+                  onClick={() => deleteData(false)}
+                >
+                  No
+                </button>
               </div>
             </div>
           </div>
-        )}
+        </div>
+      )}
     </div>
   );
 };

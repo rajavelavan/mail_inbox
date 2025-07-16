@@ -65,7 +65,7 @@ const InboxSidebar: React.FC = () => {
   ];
 
   return (
-    <div className="">
+    <div>
       <div className="p-3 mt-5 rounded-lg bg-[#ECEFF3] text-[#454F5B] dark:bg-[#23272C] dark:text-white">
         Lead Details
       </div>

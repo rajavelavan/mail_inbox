@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import React, { ReactNode } from 'react';
 import Sidebar from '../components/SideBar';
@@ -10,19 +10,18 @@ interface LayoutProps {
 
 const Layout = ({ children }: LayoutProps) => {
   return (
-    <div className='flex'>
-      <div className='w-[4%]'>
-        <Sidebar/>
+    <div className="flex overflow-hidden">
+      <div className="w-[4%] h-full">
+        <Sidebar />
       </div>
-      <div className='w-[96%]'>
-        <Header/>
-        <div>
-          <main className=''>{children}</main>
+      <div className="w-[96%] h-full">
+        <div className='w-full'>
+        <Header />
         </div>
+      <main className='w-full max-h-full overflow-auto'>{children}</main>
       </div>
-    </div> 
-  )};
+    </div>
+  );
+};
 
 export default Layout;
-
-

@@ -4,7 +4,7 @@ import { FiMoreHorizontal } from 'react-icons/fi';
 
 export default function MainHeader() {
   return (
-    <div className="flex sticky w-full items-center justify-between dark:bg-black p-3 bg-white border-b-2 border-[#ECECED]">
+    <div className="flex sticky w-full h-[10%] items-center justify-between dark:bg-black p-3 bg-white border-b-2 border-[#ECECED]">
       <div className="text-black font-bold text-left">
         <p className="dark:text-white">Orlando</p>
         <span className="text-xs text-[#94979B]">orlando@gmail.com</span>

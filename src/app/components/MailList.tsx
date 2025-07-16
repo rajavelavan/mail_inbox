@@ -64,7 +64,7 @@ const MailList = ({ onMailSelect }: MailListProps) => {
   };
 
   return (
-    <div className="h-[inherit]">
+    <div>
       <div className="flex justify-between">
         <div className="flex text-blue-500 items-center justify-around">
           <h1 className="font-bold text-2xl">All Inbox(s)</h1>
